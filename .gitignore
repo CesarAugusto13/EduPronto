@@ -1,0 +1,15 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Env
+.env
+backend/.env
+
+# Next
+.next/
+out/
+
+# OS
+.DS_Store
