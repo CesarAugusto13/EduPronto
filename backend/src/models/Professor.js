@@ -14,6 +14,22 @@ const ProfessorSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  biografia: {
+    type: String,
+    default: ''
+  },
+  escola: {
+    type: String,
+    default: ''
+  },
+  formacoes: {
+    type: [String],
+    default: []
+  },
+  foto: {
+    type: String,
+    default: ''
+  },
   criadoEm: {
     type: Date,
     default: Date.now

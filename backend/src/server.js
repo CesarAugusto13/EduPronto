@@ -1,18 +1,11 @@
 require('dotenv').config();
-const express = require('express');
 const connectDB = require('./config/database');
-const authRoutes = require('./routes/auth.routes');
-const atividadeRoutes = require('./routes/atividade.routes');
+const app = require('./app');
 
-const app = express();
-
-app.use(express.json());
+const PORT = 3000;
 
 connectDB();
 
-app.use('/auth', authRoutes);
-app.use('/atividades', atividadeRoutes);
-
-app.listen(3000, () => {
-  console.log('Servidor rodando na porta 3000');
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

@@ -53,9 +53,7 @@ exports.register = async (req, res) => {
   }
 };
 
-/**
- * LOGIN
- */
+
 exports.login = async (req, res) => {
   try {
     if (!req.body) {
@@ -105,6 +103,16 @@ exports.login = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       message: 'Erro no login'
+    });
+  }
+};
+
+exports.me = async (req, res) => {
+  try {
+    return res.json(req.user);
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Erro ao buscar usuário logado'
     });
   }
 };
