@@ -2,7 +2,7 @@
 
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import styles from './dashboard.module.css';
+import styles from './Dashboard.module.css';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -26,7 +26,6 @@ export default function DashboardLayout({ children }) {
     );
   }
 
-  // 🔒 Sem usuário, não renderiza
   if (!user) return null;
 
   return (

@@ -1,113 +1,46 @@
 .wrapper {
+  min-height: 100vh;
+  background: #f4f6f8;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 40px 16px;
 }
 
 .container {
+  background: #fff;
   width: 100%;
-  max-width: 600px;
-  background: #ffffff;
+  max-width: 720px;
+  border-radius: 12px;
   padding: 32px;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 .container h1 {
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-bottom: 24px;
   text-align: center;
+  margin-bottom: 32px;
 }
 
-
-/* FORM */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* GRID */
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-/* CAMPOS */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.field label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #374151;
-}
-
-.field input,
-.field textarea {
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 0.9rem;
-  resize: none;
-}
-
-.field input:focus,
-.field textarea:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
-}
-
-/* HINT */
-.hint {
-  font-size: 0.75rem;
-  color: #6b7280;
-}
-
-/* BOTÃO */
-.button {
-  margin-top: 12px;
-  padding: 12px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  border-radius: 10px;
-  border: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.button:hover {
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
-}
-
-/* MOBILE */
-@media (max-width: 600px) {
-  .row {
-    grid-template-columns: 1fr;
-  }
-}
-
-
+/* Avatar */
 .avatarBox {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .avatarLabel {
   position: relative;
+  width: 120px;
+  height: 120px;
   cursor: pointer;
 }
 
+.avatarLabel input {
+  display: none;
+}
+
 .avatar {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #2563eb;
@@ -116,15 +49,78 @@
 .avatarLabel span {
   position: absolute;
   bottom: 0;
-  width: 100%;
-  background: rgba(0,0,0,0.6);
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   font-size: 12px;
+  padding: 6px 0;
   text-align: center;
+  border-radius: 0 0 50% 50%;
   opacity: 0;
-  transition: 0.3s;
+  transition: opacity 0.2s;
 }
 
 .avatarLabel:hover span {
   opacity: 1;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.field input,
+.field textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.field textarea {
+  resize: none;
+}
+
+/* Linha dupla */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Dica */
+.hint {
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* Botão */
+.button {
+  margin-top: 16px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #1e40af;
 }
