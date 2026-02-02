@@ -31,6 +31,10 @@ export default function Header() {
   }, []);
 
   if (!user) return null; // ⛑️ evita erro enquanto carrega
+  const fotoUrl =
+    user?.foto && user.foto.startsWith("/")
+      ? `${API_URL}${user.foto}`
+      : "/avatar.png";
 
   return (
     <header className={styles.header}>
@@ -39,17 +43,7 @@ export default function Header() {
         ref={dropdownRef}
         onClick={() => setOpen(!open)}
       >
-        <img
-          src={
-            user.foto
-              ? `${API_URL}${user.foto}`
-              : "/avatar.png"
-          }
-          alt="Perfil"
-          width={36}
-          height={36}
-          className={styles.avatar}
-        />
+        <img src={fotoUrl} alt="Foto do perfil" className={styles.avatar} />
 
         <span className={styles.name}>{user.nome}</span>
 

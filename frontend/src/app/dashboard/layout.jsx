@@ -6,6 +6,7 @@ import styles from './Dashboard.module.css';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Loading from '@/components/Loading';
 
 export default function DashboardLayout({ children }) {
   const { user, loading } = useAuth();
@@ -17,13 +18,8 @@ export default function DashboardLayout({ children }) {
     }
   }, [loading, user]);
 
-  // ⏳ Enquanto valida sessão
   if (loading) {
-    return (
-      <div style={{ padding: 40 }}>
-        <p>Validando sessão...</p>
-      </div>
-    );
+    return <Loading text="Validando sessão..." />;
   }
 
   if (!user) return null;

@@ -168,3 +168,43 @@
     color: #6b7280;
   }
 }
+
+.view {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  max-width: 700px;
+}
+
+.view h2 {
+  margin-bottom: 16px;
+}
+
+.description {
+  margin-top: 16px;
+}
+
+.actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+
+.status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.ativa {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.encerrada {
+  background: #fee2e2;
+  color: #991b1b;
+}

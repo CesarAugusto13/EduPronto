@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import api from '@/services/api';
+import { createContext, useContext, useEffect, useState } from "react";
+import api from "@/services/api";
 
 const AuthContext = createContext({});
 
@@ -11,21 +11,19 @@ export function AuthProvider({ children }) {
 
   async function login(email, senha) {
     const response = await api.post('/auth/login', { email, senha });
-
-    localStorage.setItem('token', response.data.token);
+    localStorage.setItem("token", response.data.token);
     api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
-
     setUser(response.data.professor);
   }
 
   function logout() {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUser(null);
   }
 
   useEffect(() => {
     async function loadUser() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (!token) {
         setLoading(false);
@@ -35,8 +33,7 @@ export function AuthProvider({ children }) {
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
       try {
-        // ⚠️ O certo aqui é /profile/me (não /auth/me)
-        const response = await api.get('/profile/me');
+        const response = await api.get("/profile/me");
         setUser(response.data);
       } catch {
         logout();

@@ -13,9 +13,18 @@ const AtividadeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  ano: {
+  turma: {
     type: String,
     required: true
+  },
+  dataEntrega: {
+    type: Date,
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['rascunho', 'ativa', 'encerrada'],
+    default: 'rascunho'
   },
   professor: {
     type: mongoose.Schema.Types.ObjectId,
