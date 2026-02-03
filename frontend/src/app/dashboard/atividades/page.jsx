@@ -14,7 +14,8 @@ export default function Atividades() {
   const [busca, setBusca] = useState("");
   const [filtros, setFiltros] = useState({
     materia: "",
-    turma: "",
+    ano: "",
+    ordenarPor: "",
   });
 
   useEffect(() => {
@@ -32,16 +33,41 @@ export default function Atividades() {
     loadAtividades();
   }, []);
 
-  const atividadesFiltradas = atividades.filter((atividade) => {
-    return (
-      atividade.titulo.toLowerCase().includes(busca.toLowerCase()) &&
-      (!filtros.materia ||
-        atividade.materia
-          .toLowerCase()
-          .includes(filtros.materia.toLowerCase())) &&
-      (!filtros.turma || atividade.turma === filtros.turma)
-    );
-  });
+  const atividadesFiltradas = atividades
+    .filter((atividade) => {
+      const tituloMatch = atividade.titulo
+        .toLowerCase()
+        .includes(busca.toLowerCase());
+
+      const materiaMatch =
+        !filtros.materia ||
+        atividade.materia.toLowerCase().includes(filtros.materia.toLowerCase());
+
+      const anoMatch = !filtros.ano || atividade.ano === filtros.ano;
+
+      return tituloMatch && materiaMatch && anoMatch;
+    })
+    .sort((a, b) => {
+      if (!filtros.ordenarPor) return 0;
+
+      if (filtros.ordenarPor === "entregaAsc") {
+        return new Date(a.dataEntrega) - new Date(b.dataEntrega);
+      }
+
+      if (filtros.ordenarPor === "entregaDesc") {
+        return new Date(b.dataEntrega) - new Date(a.dataEntrega);
+      }
+
+      if (filtros.ordenarPor === "criacaoAsc") {
+        return new Date(a.criadaEm) - new Date(b.criadaEm);
+      }
+
+      if (filtros.ordenarPor === "criacaoDesc") {
+        return new Date(b.criadaEm) - new Date(a.criadaEm);
+      }
+
+      return 0;
+    });
 
   async function handleDelete(id) {
     const confirmacao = confirm(
@@ -59,7 +85,7 @@ export default function Atividades() {
   }
 
   if (loading) {
-  return <Loading text="Carregando atividade..." />;
+    return <Loading text="Carregando atividade..." />;
   }
 
   return (
@@ -94,13 +120,26 @@ export default function Atividades() {
         />
 
         <select
-          value={filtros.turma}
-          onChange={(e) => setFiltros({ ...filtros, turma: e.target.value })}
+          value={filtros.ano}
+          onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })}
         >
-          <option value="">Todas as turmas</option>
+          <option value="">Todos os anos</option>
           <option value="1º Ano">1º Ano</option>
           <option value="2º Ano">2º Ano</option>
           <option value="3º Ano">3º Ano</option>
+        </select>
+
+        <select
+          value={filtros.ordenarPor}
+          onChange={(e) =>
+            setFiltros({ ...filtros, ordenarPor: e.target.value })
+          }
+        >
+          <option value="">Ordenar por</option>
+          <option value="entregaAsc">Entrega (mais próxima)</option>
+          <option value="entregaDesc">Entrega (mais distante)</option>
+          <option value="criacaoDesc">Criação (mais recente)</option>
+          <option value="criacaoAsc">Criação (mais antiga)</option>
         </select>
       </div>
 
@@ -115,6 +154,7 @@ export default function Atividades() {
                 <th>Título</th>
                 <th>Matéria</th>
                 <th>Ano</th>
+                <th>Entrega</th>
                 <th>Criada em</th>
                 <th></th>
               </tr>
@@ -126,20 +166,28 @@ export default function Atividades() {
                   <td data-label="Título">{atividade.titulo}</td>
                   <td data-label="Matéria">{atividade.materia}</td>
                   <td data-label="Ano">{atividade.ano}</td>
+
+                  <td data-label="Entrega">
+                    {atividade.dataEntrega
+                      ? new Date(atividade.dataEntrega).toLocaleDateString()
+                      : "-"}
+                  </td>
+
                   <td data-label="Criada em">
                     {new Date(atividade.criadaEm).toLocaleDateString()}
                   </td>
+
                   <td className={styles.actions}>
                     <Link
                       href={`/dashboard/atividades/${atividade._id}/editar`}
                     >
                       ✏️
                     </Link>
-                    <Link
-                      href={`/dashboard/atividades/${atividade._id}`}
-                    >
+
+                    <Link href={`/dashboard/atividades/${atividade._id}`}>
                       👁️
                     </Link>
+
                     <button
                       className={styles.delete}
                       title="Excluir"

@@ -1,40 +1,74 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import styles from './Dashboard.module.css';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import api from '@/services/api';
+import Loading from '@/components/Loading';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [atividades, setAtividades] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // MOCK (depois você troca por dados reais da API)
-  const resumo = {
-    totalAtividades: 12,
-    atividadesAtivas: 5,
-    turmas: 3,
-    pendentes: 2,
-  };
+  useEffect(() => {
+    async function carregarDashboard() {
+      try {
+        const { data } = await api.get('/atividades');
+        setAtividades(data);
+      } catch (error) {
+        console.error('Erro ao carregar dashboard', error);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const atividadesRecentes = [
-    {
-      id: 1,
-      titulo: 'Prova de Matemática',
-      data: '20/01/2026',
-      status: 'Ativa',
-    },
-    {
-      id: 2,
-      titulo: 'Lista de Exercícios',
-      data: '18/01/2026',
-      status: 'Rascunho',
-    },
-    {
-      id: 3,
-      titulo: 'Trabalho em Grupo',
-      data: '15/01/2026',
-      status: 'Encerrada',
-    },
-  ];
+    carregarDashboard();
+  }, []);
+
+  // 📊 RESUMO
+  const resumo = useMemo(() => {
+    const total = atividades.length;
+
+    const ativas = atividades.filter(
+      (a) => a.status === 'ativa'
+    ).length;
+
+    const turmasUnicas = new Set(
+      atividades.map((a) => a.turma)
+    ).size;
+
+    const hoje = new Date();
+
+    const pendentes = atividades.filter(
+      (a) =>
+        a.status === 'ativa' &&
+        a.dataEntrega &&
+        new Date(a.dataEntrega) < hoje
+    ).length;
+
+    return {
+      totalAtividades: total,
+      atividadesAtivas: ativas,
+      turmas: turmasUnicas,
+      pendentes,
+    };
+  }, [atividades]);
+
+  // 🕒 ATIVIDADES RECENTES (últimas 5)
+  const atividadesRecentes = useMemo(() => {
+    return [...atividades]
+      .sort(
+        (a, b) =>
+          new Date(b.criadaEm) - new Date(a.criadaEm)
+      )
+      .slice(0, 5);
+  }, [atividades]);
+
+  if (loading) {
+    return <Loading text="Carregando dashboard..." />;
+  }
 
   return (
     <div className={styles.dashboard}>
@@ -44,7 +78,7 @@ export default function DashboardPage() {
         <p>Bem-vindo ao seu painel de controle</p>
       </section>
 
-      {/* CARDS DE RESUMO */}
+      {/* CARDS */}
       <section className={styles.cards}>
         <div className={styles.card}>
           <span className={styles.icon}>📚</span>
@@ -79,17 +113,26 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ATALHOS RÁPIDOS */}
+      {/* AÇÕES */}
       <section className={styles.actions}>
-        <Link href="/dashboard/atividades/nova" className={styles.actionPrimary}>
+        <Link
+          href="/dashboard/atividades/nova"
+          className={styles.actionPrimary}
+        >
           ➕ Nova atividade
         </Link>
 
-        <Link href="/dashboard/atividades" className={styles.action}>
+        <Link
+          href="/dashboard/atividades"
+          className={styles.action}
+        >
           📚 Minhas atividades
         </Link>
 
-        <Link href="/dashboard/perfil" className={styles.action}>
+        <Link
+          href="/dashboard/perfil"
+          className={styles.action}
+        >
           👤 Meu perfil
         </Link>
       </section>
@@ -98,7 +141,9 @@ export default function DashboardPage() {
       <section className={styles.recent}>
         <div className={styles.recentHeader}>
           <h2>Atividades recentes</h2>
-          <Link href="/dashboard/atividades">Ver todas</Link>
+          <Link href="/dashboard/atividades">
+            Ver todas
+          </Link>
         </div>
 
         {atividadesRecentes.length === 0 ? (
@@ -113,18 +158,26 @@ export default function DashboardPage() {
             <thead>
               <tr>
                 <th>Título</th>
-                <th>Criada em</th>
+                <th>Entrega</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
               {atividadesRecentes.map((atividade) => (
-                <tr key={atividade.id}>
+                <tr key={atividade._id}>
                   <td>{atividade.titulo}</td>
-                  <td>{atividade.data}</td>
+                  <td>
+                    {atividade.dataEntrega
+                      ? new Date(
+                          atividade.dataEntrega
+                        ).toLocaleDateString()
+                      : '-'}
+                  </td>
                   <td>
                     <span
-                      className={`${styles.status} ${styles[atividade.status.toLowerCase()]}`}
+                      className={`${styles.status} ${
+                        styles[atividade.status]
+                      }`}
                     >
                       {atividade.status}
                     </span>
