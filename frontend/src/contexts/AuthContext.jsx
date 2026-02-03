@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "@/services/api";
@@ -10,10 +10,17 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   async function login(email, senha) {
-    const response = await api.post('/auth/login', { email, senha });
-    localStorage.setItem("token", response.data.token);
-    api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`;
-    setUser(response.data.professor);
+    const response = await api.post("/auth/login", { email, senha });
+
+    const token = response.data.token;
+
+    localStorage.setItem("token", token);
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+    // 🔥 BUSCA PERFIL COMPLETO
+    const profileResponse = await api.get("/profile/me");
+
+    setUser(profileResponse.data);
   }
 
   function logout() {

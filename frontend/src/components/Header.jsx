@@ -30,11 +30,12 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  if (!user) return null; // ⛑️ evita erro enquanto carrega
-  const fotoUrl =
-    user?.foto && user.foto.startsWith("/")
-      ? `${API_URL}${user.foto}`
-      : "/avatar.png";
+  if (!user) return null;
+  const fotoUrl = user?.foto
+    ? user.foto.startsWith("http")
+      ? user.foto
+      : `${API_URL}${user.foto.startsWith("/") ? "" : "/"}${user.foto}`
+    : "/avatar.png";
 
   return (
     <header className={styles.header}>
@@ -43,7 +44,14 @@ export default function Header() {
         ref={dropdownRef}
         onClick={() => setOpen(!open)}
       >
-        <img src={fotoUrl} alt="Foto do perfil" className={styles.avatar} />
+        <img
+          src={fotoUrl}
+          alt="Foto do perfil"
+          className={styles.avatar}
+          onError={(e) => {
+            e.currentTarget.src = "/avatar.png";
+          }}
+        />
 
         <span className={styles.name}>{user.nome}</span>
 

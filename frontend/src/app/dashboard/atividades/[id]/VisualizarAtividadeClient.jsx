@@ -39,48 +39,65 @@ export default function VisualizarAtividadeClient({ atividadeId }) {
   }
 
   return (
-    <div className={styles.view}>
-      <h2>{atividade.titulo}</h2>
+    <div className={styles.viewPage}>
+      <div className={styles.viewCard}>
+        <div className={styles.viewHeader}>
+          <h2>{atividade.titulo}</h2>
 
-      <p>
-        <strong>Matéria:</strong> {atividade.materia}
-      </p>
-
-      <p>
-        <strong>Turma:</strong> {atividade.turma}
-      </p>
-
-      <p>
-        <strong>Status:</strong>{" "}
-        {atividade.status === "ativa" ? "Ativa" : "Encerrada"}
-      </p>
-
-      {atividade.dataEntrega && (
-        <p>
-          <strong>Data de entrega:</strong>{" "}
-          {new Date(atividade.dataEntrega).toLocaleDateString()}
-        </p>
-      )}
-
-      {atividade.descricao && (
-        <div className={styles.description}>
-          <strong>Descrição:</strong>
-          <p>{atividade.descricao}</p>
+          <span
+            className={`${styles.status} ${
+              atividade.status === "ativa" ? styles.active : styles.closed
+            }`}
+          >
+            {atividade.status === "ativa" ? "Ativa" : "Encerrada"}
+          </span>
         </div>
-      )}
 
-      <div className={styles.actions}>
-        <button
-          onClick={() =>
-            router.push(`/dashboard/atividades/${atividade._id}/editar`)
-          }
-        >
-          ✏️ Editar
-        </button>
+        <div className={styles.meta}>
+          <div>
+            <span>Matéria</span>
+            <strong>{atividade.materia}</strong>
+          </div>
 
-        <button onClick={() => router.push("/dashboard/atividades")}>
-          ⬅️ Voltar
-        </button>
+          <div>
+            <span>Turma</span>
+            <strong>{atividade.turma}</strong>
+          </div>
+
+          {atividade.dataEntrega && (
+            <div>
+              <span>Entrega</span>
+              <strong>
+                {new Date(atividade.dataEntrega).toLocaleDateString()}
+              </strong>
+            </div>
+          )}
+        </div>
+
+        {atividade.descricao && (
+          <div className={styles.description}>
+            <h4>Descrição</h4>
+            <p>{atividade.descricao}</p>
+          </div>
+        )}
+
+        <div className={styles.actionsView}>
+          <button
+            className={styles.secondary}
+            onClick={() => router.push("/dashboard/atividades")}
+          >
+            ⬅️ Voltar
+          </button>
+
+          <button
+            className={styles.primary}
+            onClick={() =>
+              router.push(`/dashboard/atividades/${atividade._id}/editar`)
+            }
+          >
+            ✏️ Editar atividade
+          </button>
+        </div>
       </div>
     </div>
   );
