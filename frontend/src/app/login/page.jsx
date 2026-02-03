@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -26,6 +26,9 @@ export default function Login() {
     <div className={styles.container}>
       <form className={styles.card} onSubmit={handleSubmit}>
         <h1 className={styles.title}>Entrar</h1>
+        <p className={styles.subtitle}>
+          Acesse sua conta e gerencie suas atividades
+        </p>
 
         <input
           className={styles.input}
