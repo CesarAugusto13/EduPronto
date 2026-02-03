@@ -5,6 +5,42 @@ import { useRouter } from "next/navigation";
 import api from "@/services/api";
 import styles from "./AtividadeForm.module.css";
 
+/* 📚 CONSTANTES EDUCACIONAIS */
+const TURMAS = [
+  "1º Ano - Fundamental",
+  "2º Ano - Fundamental",
+  "3º Ano - Fundamental",
+  "4º Ano - Fundamental",
+  "5º Ano - Fundamental",
+  "6º Ano - Fundamental",
+  "7º Ano - Fundamental",
+  "8º Ano - Fundamental",
+  "9º Ano - Fundamental",
+  "1º Ano - Ensino Médio",
+  "2º Ano - Ensino Médio",
+  "3º Ano - Ensino Médio",
+];
+
+const MATERIAS = [
+  "Língua Portuguesa",
+  "Matemática",
+  "Ciências",
+  "História",
+  "Geografia",
+  "Arte",
+  "Educação Física",
+  "Inglês",
+  "Ensino Religioso",
+  "Física",
+  "Química",
+  "Biologia",
+  "Filosofia",
+  "Sociologia",
+  "Redação",
+  "Projeto de Vida",
+  "Tecnologia",
+];
+
 export default function AtividadeForm({ atividadeId }) {
   const router = useRouter();
 
@@ -20,7 +56,7 @@ export default function AtividadeForm({ atividadeId }) {
   const [loading, setLoading] = useState(false);
   const [loadingForm, setLoadingForm] = useState(!!atividadeId);
 
-  // 🔄 CARREGAR DADOS (EDIÇÃO)
+  /* 🔄 CARREGAR ATIVIDADE (EDIÇÃO) */
   useEffect(() => {
     if (!atividadeId) return;
 
@@ -72,7 +108,6 @@ export default function AtividadeForm({ atividadeId }) {
     }
   }
 
-  // ⏳ LOADING DE EDIÇÃO
   if (loadingForm) {
     return <p>Carregando atividade...</p>;
   }
@@ -83,37 +118,47 @@ export default function AtividadeForm({ atividadeId }) {
 
       <input
         type="text"
-        placeholder="Título"
+        placeholder="Título da atividade"
         value={form.titulo}
         onChange={(e) => setForm({ ...form, titulo: e.target.value })}
         required
       />
 
       <textarea
-        placeholder="Descrição"
+        placeholder="Descrição da atividade (opcional)"
         value={form.descricao}
         onChange={(e) => setForm({ ...form, descricao: e.target.value })}
       />
 
-      <input
-        type="text"
-        placeholder="Matéria"
+      {/* 📘 MATÉRIA */}
+      <select
         value={form.materia}
         onChange={(e) => setForm({ ...form, materia: e.target.value })}
         required
-      />
+      >
+        <option value="">Selecione a matéria</option>
+        {MATERIAS.map((materia) => (
+          <option key={materia} value={materia}>
+            {materia}
+          </option>
+        ))}
+      </select>
 
+      {/* 🎓 TURMA */}
       <select
         value={form.turma}
         onChange={(e) => setForm({ ...form, turma: e.target.value })}
         required
       >
         <option value="">Selecione a turma</option>
-        <option value="1º Ano">1º Ano</option>
-        <option value="2º Ano">2º Ano</option>
-        <option value="3º Ano">3º Ano</option>
+        {TURMAS.map((turma) => (
+          <option key={turma} value={turma}>
+            {turma}
+          </option>
+        ))}
       </select>
 
+      {/* 📅 DATA DE ENTREGA */}
       <input
         type="date"
         value={form.dataEntrega}
@@ -122,7 +167,7 @@ export default function AtividadeForm({ atividadeId }) {
         }
       />
 
-      {/* 👇 STATUS SÓ FAZ SENTIDO NA EDIÇÃO */}
+      {/* 🔁 STATUS (SÓ NA EDIÇÃO) */}
       {atividadeId && (
         <select
           value={form.status}

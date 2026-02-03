@@ -7,6 +7,41 @@ import styles from "./Atividades.module.css";
 import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
 
+const TURMAS = [
+  "1º Ano - Fundamental",
+  "2º Ano - Fundamental",
+  "3º Ano - Fundamental",
+  "4º Ano - Fundamental",
+  "5º Ano - Fundamental",
+  "6º Ano - Fundamental",
+  "7º Ano - Fundamental",
+  "8º Ano - Fundamental",
+  "9º Ano - Fundamental",
+  "1º Ano - Ensino Médio",
+  "2º Ano - Ensino Médio",
+  "3º Ano - Ensino Médio",
+];
+
+const MATERIAS = [
+  "Língua Portuguesa",
+  "Matemática",
+  "Ciências",
+  "História",
+  "Geografia",
+  "Arte",
+  "Educação Física",
+  "Inglês",
+  "Ensino Religioso",
+  "Física",
+  "Química",
+  "Biologia",
+  "Filosofia",
+  "Sociologia",
+  "Redação",
+  "Projeto de Vida",
+  "Tecnologia",
+];
+
 export default function Atividades() {
   const [atividades, setAtividades] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -112,21 +147,28 @@ export default function Atividades() {
           onChange={(e) => setBusca(e.target.value)}
         />
 
-        <input
-          type="text"
-          placeholder="Filtrar por matéria"
+        <select
           value={filtros.materia}
           onChange={(e) => setFiltros({ ...filtros, materia: e.target.value })}
-        />
+        >
+          <option value="">Todas as matérias</option>
+          {MATERIAS.map((materia) => (
+            <option key={materia} value={materia}>
+              {materia}
+            </option>
+          ))}
+        </select>
 
         <select
           value={filtros.ano}
           onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })}
         >
-          <option value="">Todos os anos</option>
-          <option value="1º Ano">1º Ano</option>
-          <option value="2º Ano">2º Ano</option>
-          <option value="3º Ano">3º Ano</option>
+          <option value="">Todas as turmas</option>
+          {TURMAS.map((turma) => (
+            <option key={turma} value={turma}>
+              {turma}
+            </option>
+          ))}
         </select>
 
         <select
@@ -136,10 +178,10 @@ export default function Atividades() {
           }
         >
           <option value="">Ordenar por</option>
-          <option value="entregaAsc">Entrega (mais próxima)</option>
-          <option value="entregaDesc">Entrega (mais distante)</option>
-          <option value="criacaoDesc">Criação (mais recente)</option>
-          <option value="criacaoAsc">Criação (mais antiga)</option>
+          <option value="entregaAsc">Entrega mais próxima</option>
+          <option value="entregaDesc">Entrega mais distante</option>
+          <option value="criacaoDesc">Criação mais recente</option>
+          <option value="criacaoAsc">Criação mais antiga</option>
         </select>
       </div>
 
