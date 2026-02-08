@@ -158,14 +158,15 @@ export default function AtividadeForm({ atividadeId }) {
         ))}
       </select>
 
-      {/* 📅 DATA DE ENTREGA */}
-      <input
-        type="date"
-        value={form.dataEntrega}
-        onChange={(e) =>
-          setForm({ ...form, dataEntrega: e.target.value })
-        }
-      />
+        <label htmlFor="dataEntrega">Data de entrega</label>
+        <input
+          id="dataEntrega"
+          type="date"
+          value={form.dataEntrega}
+          onChange={(e) =>
+            setForm({ ...form, dataEntrega: e.target.value })
+          }
+        />
 
       {/* 🔁 STATUS (SÓ NA EDIÇÃO) */}
       {atividadeId && (
