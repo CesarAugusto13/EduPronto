@@ -121,7 +121,8 @@
 /* AÇÕES */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
 }
 
 .actions button {
@@ -330,4 +331,19 @@
 
 .secondary:hover {
   background: #e2e8f0;
+}
+
+.copy {
+  background: #ecfeff;
+  border: 1px solid #67e8f9;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.copy:hover {
+  background: #cffafe;
+  transform: scale(1.05);
 }

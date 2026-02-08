@@ -51,6 +51,7 @@ export default function AtividadeForm({ atividadeId }) {
     turma: "",
     dataEntrega: "",
     status: "ativa",
+    publica: false, // ✅ SEMPRE DEFINIDO
   });
 
   const [loading, setLoading] = useState(false);
@@ -70,9 +71,8 @@ export default function AtividadeForm({ atividadeId }) {
           materia: data.materia ?? "",
           turma: data.turma ?? "",
           status: data.status ?? "ativa",
-          dataEntrega: data.dataEntrega
-            ? data.dataEntrega.slice(0, 10)
-            : "",
+          publica: data.publica ?? false,
+          dataEntrega: data.dataEntrega ? data.dataEntrega.slice(0, 10) : "",
         });
       } catch (error) {
         console.error(error);
@@ -86,9 +86,19 @@ export default function AtividadeForm({ atividadeId }) {
     carregarAtividade();
   }, [atividadeId, router]);
 
+  /* 🧠 REGRA UX:
+     se remover data → atividade NÃO pode ser pública */
+  useEffect(() => {
+    if (!form.dataEntrega && form.publica) {
+      setForm((prev) => ({ ...prev, publica: false }));
+    }
+  }, [form.dataEntrega, form.publica]);
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
+
+    console.log("FORM ENVIADO:", form);
 
     try {
       if (atividadeId) {
@@ -158,28 +168,58 @@ export default function AtividadeForm({ atividadeId }) {
         ))}
       </select>
 
-        <label htmlFor="dataEntrega">Data de entrega</label>
-        <input
-          id="dataEntrega"
-          type="date"
-          value={form.dataEntrega}
-          onChange={(e) =>
-            setForm({ ...form, dataEntrega: e.target.value })
-          }
-        />
+      <label htmlFor="dataEntrega">Data de entrega</label>
+      <input
+        id="dataEntrega"
+        type="date"
+        value={form.dataEntrega}
+        onChange={(e) =>
+          setForm({ ...form, dataEntrega: e.target.value })
+        }
+      />
 
       {/* 🔁 STATUS (SÓ NA EDIÇÃO) */}
       {atividadeId && (
         <select
           value={form.status}
-          onChange={(e) =>
-            setForm({ ...form, status: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, status: e.target.value })}
         >
           <option value="ativa">Ativa</option>
           <option value="encerrada">Encerrada</option>
         </select>
       )}
+
+      {/* 🌍 TOGGLE PÚBLICO */}
+      <div className={styles.toggleContainer}>
+        <label className={styles.publicToggle}>
+          <input
+            type="checkbox"
+            checked={form.publica}
+            disabled={!form.dataEntrega}
+            onChange={(e) =>
+              setForm({ ...form, publica: e.target.checked })
+            }
+          />
+          Tornar atividade pública
+        </label>
+
+        <div className={styles.toggleText}>
+          <strong>
+            {form.publica ? "Atividade pública" : "Atividade privada"}
+          </strong>
+          <p>
+            {form.publica
+              ? "Qualquer aluno com o link poderá acessar."
+              : "Apenas você pode visualizar esta atividade."}
+          </p>
+
+          {!form.dataEntrega && (
+            <small style={{ color: "#c62828" }}>
+              Defina uma data de entrega para tornar pública.
+            </small>
+          )}
+        </div>
+      </div>
 
       <button type="submit" disabled={loading}>
         {loading

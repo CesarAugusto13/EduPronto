@@ -7,6 +7,8 @@ import styles from "./Atividades.module.css";
 import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
 
+const PUBLIC_URL = process.env.NEXT_PUBLIC_FRONT_URL || "http://localhost:3001";
+
 const TURMAS = [
   "1º Ano - Fundamental",
   "2º Ano - Fundamental",
@@ -123,6 +125,12 @@ export default function Atividades() {
     return <Loading text="Carregando atividade..." />;
   }
 
+  function copiarLinkPublico(id) {
+    const link = `${PUBLIC_URL}/public/atividades/${id}`;
+    navigator.clipboard.writeText(link);
+    toast.success("Link público copiado!");
+  }
+
   return (
     <div className={styles.page}>
       {/* HEADER */}
@@ -198,7 +206,7 @@ export default function Atividades() {
                 <th>Ano</th>
                 <th>Entrega</th>
                 <th>Criada em</th>
-                <th></th>
+                <th>Ações</th>
               </tr>
             </thead>
 
@@ -222,13 +230,27 @@ export default function Atividades() {
                   <td className={styles.actions}>
                     <Link
                       href={`/dashboard/atividades/${atividade._id}/editar`}
+                      title="Editar"
                     >
                       ✏️
                     </Link>
 
-                    <Link href={`/dashboard/atividades/${atividade._id}`}>
+                    <Link
+                      href={`/dashboard/atividades/${atividade._id}`}
+                      title="Visualizar"
+                    >
                       👁️
                     </Link>
+
+                    {atividade.publica && (
+                      <button
+                        className={styles.copy}
+                        title="Copiar link público"
+                        onClick={() => copiarLinkPublico(atividade._id)}
+                      >
+                        🔗
+                      </button>
+                    )}
 
                     <button
                       className={styles.delete}

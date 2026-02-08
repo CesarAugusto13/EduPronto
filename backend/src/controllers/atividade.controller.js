@@ -4,18 +4,30 @@ const Atividade = require('../models/Atividade');
 // CREATE — Criar nova atividade
 exports.criar = async (req, res) => {
   try {
+    const {
+      titulo,
+      descricao,
+      turma,
+      dataEntrega,
+      status,
+      materia,
+      publica,
+    } = req.body;
+
     const atividade = await Atividade.create({
-      titulo: req.body.titulo,
-      descricao: req.body.descricao,
-      turma: req.body.turma,
-      dataEntrega: req.body.dataEntrega,
-      status: req.body.status,
-      materia: req.body.materia,
+      titulo,
+      descricao,
+      turma,
+      dataEntrega,
+      status: status || "ativa",
+      materia,
+      publica: Boolean(publica), // 🔥 AQUI ESTÁ A CORREÇÃO
       professor: req.user._id, // vem do token
     });
 
     return res.status(201).json(atividade);
   } catch (error) {
+    console.error("ERRO AO CRIAR ATIVIDADE:", error);
     return res.status(400).json({ message: error.message });
   }
 };

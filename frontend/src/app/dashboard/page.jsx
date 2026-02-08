@@ -1,11 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import styles from './Dashboard.module.css';
-import Link from 'next/link';
-import { useAuth } from '@/contexts/AuthContext';
-import api from '@/services/api';
-import Loading from '@/components/Loading';
+import { useEffect, useMemo, useState } from "react";
+import styles from "./Dashboard.module.css";
+import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
+import api from "@/services/api";
+import Loading from "@/components/Loading";
+const PUBLIC_URL =
+  process.env.NEXT_PUBLIC_FRONT_URL || "http://localhost:3001";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -15,10 +17,10 @@ export default function DashboardPage() {
   useEffect(() => {
     async function carregarDashboard() {
       try {
-        const { data } = await api.get('/atividades');
+        const { data } = await api.get("/atividades");
         setAtividades(data);
       } catch (error) {
-        console.error('Erro ao carregar dashboard', error);
+        console.error("Erro ao carregar dashboard", error);
       } finally {
         setLoading(false);
       }
@@ -31,21 +33,15 @@ export default function DashboardPage() {
   const resumo = useMemo(() => {
     const total = atividades.length;
 
-    const ativas = atividades.filter(
-      (a) => a.status === 'ativa'
-    ).length;
+    const ativas = atividades.filter((a) => a.status === "ativa").length;
 
-    const turmasUnicas = new Set(
-      atividades.map((a) => a.turma)
-    ).size;
+    const turmasUnicas = new Set(atividades.map((a) => a.turma)).size;
 
     const hoje = new Date();
 
     const pendentes = atividades.filter(
       (a) =>
-        a.status === 'ativa' &&
-        a.dataEntrega &&
-        new Date(a.dataEntrega) < hoje
+        a.status === "ativa" && a.dataEntrega && new Date(a.dataEntrega) < hoje,
     ).length;
 
     return {
@@ -59,10 +55,7 @@ export default function DashboardPage() {
   // 🕒 ATIVIDADES RECENTES (últimas 5)
   const atividadesRecentes = useMemo(() => {
     return [...atividades]
-      .sort(
-        (a, b) =>
-          new Date(b.criadaEm) - new Date(a.criadaEm)
-      )
+      .sort((a, b) => new Date(b.criadaEm) - new Date(a.criadaEm))
       .slice(0, 5);
   }, [atividades]);
 
@@ -74,7 +67,7 @@ export default function DashboardPage() {
     <div className={styles.dashboard}>
       {/* BOAS-VINDAS */}
       <section className={styles.welcome}>
-        <h1>👋 Olá, {user?.nome || 'Professor'}!</h1>
+        <h1>👋 Olá, {user?.nome || "Professor"}!</h1>
         <p>Bem-vindo ao seu painel de controle</p>
       </section>
 
@@ -122,17 +115,11 @@ export default function DashboardPage() {
           ➕ Nova atividade
         </Link>
 
-        <Link
-          href="/dashboard/atividades"
-          className={styles.action}
-        >
+        <Link href="/dashboard/atividades" className={styles.action}>
           📚 Minhas atividades
         </Link>
 
-        <Link
-          href="/dashboard/perfil"
-          className={styles.action}
-        >
+        <Link href="/dashboard/perfil" className={styles.action}>
           👤 Meu perfil
         </Link>
       </section>
@@ -141,9 +128,7 @@ export default function DashboardPage() {
       <section className={styles.recent}>
         <div className={styles.recentHeader}>
           <h2>Atividades recentes</h2>
-          <Link href="/dashboard/atividades">
-            Ver todas
-          </Link>
+          <Link href="/dashboard/atividades">Ver todas</Link>
         </div>
 
         {atividadesRecentes.length === 0 ? (
@@ -168,20 +153,17 @@ export default function DashboardPage() {
                   <td>{atividade.titulo}</td>
                   <td>
                     {atividade.dataEntrega
-                      ? new Date(
-                          atividade.dataEntrega
-                        ).toLocaleDateString()
-                      : '-'}
+                      ? new Date(atividade.dataEntrega).toLocaleDateString()
+                      : "-"}
                   </td>
                   <td>
                     <span
-                      className={`${styles.status} ${
-                        styles[atividade.status]
-                      }`}
+                      className={`${styles.status} ${styles[atividade.status]}`}
                     >
                       {atividade.status}
                     </span>
                   </td>
+                  <td>{atividade.publica ? "🌍 Pública" : "🔒 Privada"}</td>
                 </tr>
               ))}
             </tbody>

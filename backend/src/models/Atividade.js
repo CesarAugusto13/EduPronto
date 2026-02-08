@@ -1,39 +1,43 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const AtividadeSchema = new mongoose.Schema({
   titulo: {
     type: String,
-    required: true
+    required: true,
   },
   descricao: {
     type: String,
   },
   materia: {
     type: String,
-    required: true
+    required: true,
   },
   turma: {
     type: String,
-    required: true
+    required: true,
   },
   dataEntrega: {
     type: Date,
-    required: true
+    required: true,
   },
   status: {
     type: String,
-    enum: ['rascunho', 'ativa', 'encerrada'],
-    default: 'rascunho'
+    enum: ["ativa", "encerrada"],
+    default: "ativa",
+  },
+  publica: {
+    type: Boolean,
+    default: false,
   },
   professor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Professor',
-    required: true
+    ref: "Professor",
+    required: true,
   },
   criadaEm: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('Atividade', AtividadeSchema);
+module.exports = mongoose.model("Atividade", AtividadeSchema);
