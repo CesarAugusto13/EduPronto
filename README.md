@@ -113,13 +113,7 @@ O desenvolvimento seguiu as seguintes etapas:
 
 ## 🔗 Links Úteis
 
-- 🔗 Repositório do projeto:  
-  *(adicione aqui o link do GitHub)*
-
-- 🎨 Protótipos / Fluxos:  
-  *(opcional – Figma, Miro ou diagramas)*
-
-- 📄 Documentação do projeto:  
+- 📄 Documentação do projeto:  https://drive.google.com/drive/folders/1AfvR0h2ThH4imlVJysm07r70ykOTvAIL?hl=pt-br
   Relatório acadêmico do Hackathon / Projeto Integrador
 
 ---
