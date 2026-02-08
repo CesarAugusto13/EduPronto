@@ -7,7 +7,6 @@ const AtividadeSchema = new mongoose.Schema({
   },
   descricao: {
     type: String,
-    required: true
   },
   materia: {
     type: String,
